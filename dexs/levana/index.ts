@@ -6,16 +6,20 @@ const adapter: SimpleAdapter = {
     adapter: {
         osmosis: {
             fetch: async (timestamp: number): Promise<FetchResultVolume> => {
+                timestamp = Math.ceil(Date.now() / 1000)
                 const marketInfos = await fetchMarketInfos("osmosis");
                 const [dailyVolume, totalVolume] = await Promise.all([
                     fetchVolume("daily", marketInfos, timestamp),
                     fetchVolume("total", marketInfos, timestamp)
                 ]);
-                return {
+                const ret = {
                     timestamp,
                     dailyVolume: dailyVolume.toString(),
                     totalVolume: totalVolume.toString()
-                }
+                };
+
+                console.log(ret);
+                return ret;
             },
             start: 1688628356
         },
